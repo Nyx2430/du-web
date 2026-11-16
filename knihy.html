@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knižnica (SQL) | Webové technológie</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+  <script src="knihy.js" defer></script>
+</head>
+<body data-page="books">
+  <div id="topbar-container"></div>
+  <main class="page-shell">
+    <header class="page-intro">
+      <p class="eyebrow">Databáza · MySQL</p>
+      <h1>Knižnica (SQL)</h1>
+      <p>Prehľad kníh uložených v databáze a formulár na pridanie novej knihy.</p>
+    </header>
+    <section class="content-card">
+      <h2>Pridať knihu</h2>
+      <form class="demo-form" id="book-form">
+        <div class="field-group">
+          <label for="book-title">Názov</label>
+          <input id="book-title" name="nazov" type="text" required>
+        </div>
+        <div class="field-group">
+          <label for="book-author">Autor</label>
+          <input id="book-author" name="autor" type="text" required>
+        </div>
+        <div class="field-group">
+          <label for="book-year">Rok vydania</label>
+          <input id="book-year" name="rok" type="number" step="1" required>
+        </div>
+        <div class="field-group">
+          <label for="cena">Cena</label>
+          <input id="cena" name="cena" type="number" min="0" step="0.01" required>
+        </div>
+        <button type="submit">Pridať knihu</button>
+      </form>
+      <p class="demo-output" id="book-status" role="status" aria-live="polite"></p>
+    </section>
+    <section class="content-card">
+      <h2>Zoznam kníh</h2>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr><th>Názov</th><th>Autor</th><th>Rok</th><th>Cena</th><th>Nastavenia</th></tr>
+          </thead>
+          <tbody id="book-list"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><p>Vytvorené v rámci cvičenia · Databázy a internet</p></footer>
+</body>
+</html>

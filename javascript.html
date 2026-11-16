@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript | Webové technológie</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body data-page="javascript">
+  <div id="topbar-container"></div>
+  <main class="page-shell">
+    <header class="page-intro"><p class="eyebrow">JavaScript · cvičenie 1</p><h1>Stránka ožíva</h1><p>JavaScript dokáže reagovať na udalosti a meniť obsah stránky priamo v prehliadači.</p></header>
+    <section class="content-card">
+      <h2>Vyskúšaj si pozdrav</h2>
+      <div class="demo-form">
+        <div class="field-group"><label for="visitor-name">Tvoje meno</label><input id="visitor-name" type="text" placeholder="Zadaj svoje meno"></div>
+        <button class="demo-button" id="greeting-button" type="button">Zobraziť pozdrav</button>
+      </div>
+      <p class="demo-output" id="greeting-output" aria-live="polite"></p>
+      <h2>Dnešný dátum</h2>
+      <p id="today-output" class="demo-output" aria-live="polite"></p>
+      <pre class="code-sample"><code>const meno = document.getElementById('visitor-name').value;
+document.getElementById('greeting-output').textContent = `Ahoj, ${meno}!`;</code></pre>
+      <p>Spoločný súbor <code>app.js</code> obsahuje skripty tejto podstránky aj načítanie navigácie.</p>
+    </section>
+  </main>
+  <footer class="site-footer"><p>Vytvorené v rámci cvičenia · Databázy a internet</p></footer>
+</body>
+</html>

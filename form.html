@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulár | Webové technológie</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body data-page="form">
+  <div id="topbar-container"></div>
+  <main class="page-shell">
+    <header class="page-intro"><p class="eyebrow">HTML · cvičenie 1</p><h1>Formulárové prvky</h1><p>Formulár umožňuje používateľovi zadať údaje. Nižšie sú ukážky bežných polí v HTML.</p></header>
+    <section class="content-card">
+      <form class="demo-form" onsubmit="return false">
+        <div class="field-group"><label for="demo-name">Meno</label><input id="demo-name" name="name" type="text" placeholder="Napr. Jana Nováková"></div>
+        <div class="field-group"><label for="demo-email">E-mail</label><input id="demo-email" name="email" type="email" placeholder="jana@example.com"></div>
+        <div class="field-group"><label for="demo-course">Obľúbený predmet</label><select id="demo-course" name="course"><option>HTML</option><option>CSS</option><option>JavaScript</option></select></div>
+        <div class="field-group"><label for="demo-note">Poznámka</label><textarea id="demo-note" name="note" placeholder="Napíš krátku poznámku..."></textarea></div>
+        <button type="submit">Odoslať ukážku</button>
+      </form>
+    </section>
+  </main>
+  <footer class="site-footer"><p>Vytvorené v rámci cvičenia · Databázy a internet</p></footer>
+</body>
+</html>
