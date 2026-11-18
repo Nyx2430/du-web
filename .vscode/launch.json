@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Spustiť server (debug)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/server.js",
+      "preLaunchTask": "1. MySQL (XAMPP)",
+      "console": "integratedTerminal"
+    }
+  ]
+}

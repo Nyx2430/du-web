@@ -87,6 +87,17 @@ app.delete("/api/knihi/:id", (req, res) => {
   });
 });
 
+app.delete("/api/knihi/:id/natrvalo", (req, res) => {
+  db.query("DELETE FROM knihi WHERE id = ?", [req.params.id], (error, vysledok) => {
+    if (error) {
+      console.error("Chyba pri trvalom mazani knihy:", error.message);
+      return res.status(500).send("Knihu sa nepodarilo vymazat natrvalo");
+    }
+    if (!vysledok.affectedRows) return res.sendStatus(404);
+    res.send("Kniha vymazana natrvalo");
+  });
+});
+
 app.patch("/api/knihi/:id/obnovit", (req, res) => {
   db.query("UPDATE knihi SET vymazana = 0 WHERE id = ?", [req.params.id], error => {
     if (error) {

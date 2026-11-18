@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. MySQL (XAMPP)",
+      "type": "shell",
+      "command": "powershell -NoProfile -Command \"if (Get-NetTCPConnection -LocalPort 3306 -State Listen -ErrorAction SilentlyContinue) { 'MySQL uz bezi' } else { & 'C:\\xampp\\mysql_start.bat' }\"",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": { "regexp": "^$" },
+        "background": { "activeOnStart": true, "beginsPattern": ".", "endsPattern": "." }
+      },
+      "presentation": { "panel": "dedicated", "reveal": "silent" }
+    },
+    {
+      "label": "2. Server (Node)",
+      "type": "shell",
+      "command": "node server.js",
+      "isBackground": true,
+      "dependsOn": "1. MySQL (XAMPP)",
+      "problemMatcher": {
+        "pattern": { "regexp": "^$" },
+        "background": { "activeOnStart": true, "beginsPattern": ".", "endsPattern": "http://localhost:3000" }
+      },
+      "presentation": { "panel": "dedicated", "reveal": "always" }
+    },
+    {
+      "label": "Spustiť všetko (MySQL + server + web)",
+      "type": "shell",
+      "command": "powershell -NoProfile -Command \"Start-Sleep -Seconds 3; Start-Process 'http://localhost:3000/knihy.html'\"",
+      "dependsOn": "2. Server (Node)",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent" },
+      "group": { "kind": "build", "isDefault": true }
+    }
+  ]
+}

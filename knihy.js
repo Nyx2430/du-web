@@ -128,6 +128,20 @@ document.addEventListener('DOMContentLoaded', () => {
           actionCell.appendChild(makeButton('⚙ Nastavenia', () => openSettings(book)));
         }
 
+        const purgeButton = makeButton('🗑 Vymazať', async () => {
+          if (!window.confirm(`Naozaj natrvalo vymazať knihu „${book.nazov}“? Túto akciu nie je možné vrátiť.`)) return;
+          try {
+            await sendJson(`/api/knihi/${encodeURIComponent(book.id)}/natrvalo`, 'DELETE');
+            await loadBooks();
+            status.textContent = 'Kniha bola natrvalo vymazaná.';
+          } catch (error) {
+            status.textContent = `Knihu sa nepodarilo vymazať: ${error.message}`;
+          }
+        });
+        purgeButton.style.textDecoration = 'none';
+        purgeButton.style.marginLeft = '14px';
+        actionCell.appendChild(purgeButton);
+
         row.appendChild(actionCell);
         bookList.appendChild(row);
       });
