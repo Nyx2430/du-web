@@ -21,19 +21,19 @@ db.getConnection((error, connection) => {
   }
 });
 
-app.get("/api/knihi", (req, res) => {
-  db.query("SELECT Id AS id, Nazov AS nazov, Autor AS autor, Rok AS rok, cena, vymazana FROM knihi ORDER BY Id", (error, knihi) => {
+app.get("/api/knihy", (req, res) => {
+  db.query("SELECT Id AS id, Nazov AS nazov, Autor AS autor, Rok AS rok, cena, vymazana FROM knihy ORDER BY Id", (error, knihy) => {
     if (error) {
       console.error("Chyba pri nacitani knih:", error.message);
       return res.status(500).send("Databaza je docasne nedostupna");
     }
-    res.json(knihi);
+    res.json(knihy);
   });
 });
 
-app.post("/api/knihi", (req, res) => {
+app.post("/api/knihy", (req, res) => {
   const { nazov, autor, rok, cena } = req.body;
-  db.query("INSERT INTO knihi (nazov, autor, rok, cena) VALUES (?, ?, ?, ?)",
+  db.query("INSERT INTO knihy (nazov, autor, rok, cena) VALUES (?, ?, ?, ?)",
     [nazov, autor, rok, cena], error => {
       if (error) {
         console.error("Chyba pri pridavani knihy:", error.message);
@@ -43,13 +43,13 @@ app.post("/api/knihi", (req, res) => {
     });
 });
 
-app.put("/api/knihi/:id", (req, res) => {
+app.put("/api/knihy/:id", (req, res) => {
   const { nazov, autor, rok } = req.body;
   if (!nazov || !autor || !Number.isInteger(rok)) {
     return res.status(400).send("Neplatne udaje");
   }
 
-  const sql = "UPDATE knihi SET nazov = ?, autor = ?, rok = ? WHERE id = ?";
+  const sql = "UPDATE knihy SET nazov = ?, autor = ?, rok = ? WHERE id = ?";
   db.query(sql, [nazov, autor, rok, req.params.id], (error, vysledok) => {
     if (error) {
       console.error("Chyba pri zmene knihy:", error.message);
@@ -60,13 +60,13 @@ app.put("/api/knihi/:id", (req, res) => {
   });
 });
 
-app.patch("/api/knihi/:id/cena", (req, res) => {
+app.patch("/api/knihy/:id/cena", (req, res) => {
   const cena = Number(req.body.cena);
   if (!Number.isFinite(cena) || cena < 0) {
     return res.status(400).send("Neplatna cena");
   }
 
-  const sql = "UPDATE knihi SET cena = ? WHERE id = ?";
+  const sql = "UPDATE knihy SET cena = ? WHERE id = ?";
   db.query(sql, [cena, req.params.id], (error, vysledok) => {
     if (error) {
       console.error("Chyba pri zmene ceny:", error.message);
@@ -77,8 +77,8 @@ app.patch("/api/knihi/:id/cena", (req, res) => {
   });
 });
 
-app.delete("/api/knihi/:id", (req, res) => {
-  db.query("UPDATE knihi SET vymazana = 1 WHERE id = ?", [req.params.id], error => {
+app.delete("/api/knihy/:id", (req, res) => {
+  db.query("UPDATE knihy SET vymazana = 1 WHERE id = ?", [req.params.id], error => {
     if (error) {
       console.error("Chyba pri mazani knihy:", error.message);
       return res.status(500).send("Knihu sa nepodarilo vymazat");
@@ -87,8 +87,8 @@ app.delete("/api/knihi/:id", (req, res) => {
   });
 });
 
-app.delete("/api/knihi/:id/natrvalo", (req, res) => {
-  db.query("DELETE FROM knihi WHERE id = ?", [req.params.id], (error, vysledok) => {
+app.delete("/api/knihy/:id/natrvalo", (req, res) => {
+  db.query("DELETE FROM knihy WHERE id = ?", [req.params.id], (error, vysledok) => {
     if (error) {
       console.error("Chyba pri trvalom mazani knihy:", error.message);
       return res.status(500).send("Knihu sa nepodarilo vymazat natrvalo");
@@ -98,8 +98,8 @@ app.delete("/api/knihi/:id/natrvalo", (req, res) => {
   });
 });
 
-app.patch("/api/knihi/:id/obnovit", (req, res) => {
-  db.query("UPDATE knihi SET vymazana = 0 WHERE id = ?", [req.params.id], error => {
+app.patch("/api/knihy/:id/obnovit", (req, res) => {
+  db.query("UPDATE knihy SET vymazana = 0 WHERE id = ?", [req.params.id], error => {
     if (error) {
       console.error("Chyba pri obnovení knihy:", error.message);
       return res.status(500).send("Knihu sa nepodarilo obnovit");

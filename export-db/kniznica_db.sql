@@ -24,13 +24,13 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `kniznica_db` /*!40100 DEFAULT CHARACTE
 USE `kniznica_db`;
 
 --
--- Table structure for table `knihi`
+-- Table structure for table `knihy`
 --
 
-DROP TABLE IF EXISTS `knihi`;
+DROP TABLE IF EXISTS `knihy`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `knihi` (
+CREATE TABLE `knihy` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Nazov` varchar(150) NOT NULL,
   `Autor` varchar(120) NOT NULL,
@@ -38,17 +38,17 @@ CREATE TABLE `knihi` (
   `cena` decimal(10,2) NOT NULL DEFAULT 0.00,
   `vymazana` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `knihi`
+-- Dumping data for table `knihy`
 --
 
-LOCK TABLES `knihi` WRITE;
-/*!40000 ALTER TABLE `knihi` DISABLE KEYS */;
-INSERT INTO `knihi` VALUES (1,'Hobit','Tolkien',1937,12.50,0),(2,'1984','Orwell',1949,9.90,0),(3,'Duna','Herbert',1965,18.00,0),(4,'bebra','ihor',1941,125.00,0);
-/*!40000 ALTER TABLE `knihi` ENABLE KEYS */;
+LOCK TABLES `knihy` WRITE;
+/*!40000 ALTER TABLE `knihy` DISABLE KEYS */;
+INSERT INTO `knihy` VALUES (2,'1984','Orwell',1949,9.90,0),(3,'Duna','Herbert',1965,18.00,0),(7,'ludia','anton',1987,10.50,0),(8,'gym','kirilo',2025,20.99,0);
+/*!40000 ALTER TABLE `knihy` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -60,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-16 23:06:39
+-- Dump completed on 2026-11-22 18:29:27

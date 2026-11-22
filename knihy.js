@@ -51,11 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const settingsStatus = dialog.querySelector('#settings-status');
   let currentBook = null;
 
-  const openSettings = (book) => {
-    currentBook = book;
-    titleInput.value = book.nazov;
-    authorInput.value = book.autor;
-    priceInput.value = book.cena;
+  const openSettings = (kniha) => {
+    currentBook = kniha;
+    titleInput.value = kniha.nazov;
+    authorInput.value = kniha.autor;
+    priceInput.value = kniha.cena;
     settingsStatus.textContent = '';
     dialog.showModal();
   };
@@ -73,8 +73,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     try {
       const id = encodeURIComponent(currentBook.id);
-      await sendJson(`/api/knihi/${id}`, 'PUT', { nazov, autor, rok: Number(currentBook.rok) });
-      await sendJson(`/api/knihi/${id}/cena`, 'PATCH', { cena });
+      // PUT: úprava názvu a autora knihy
+      const putResponse = await fetch(`/api/knihy/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nazov, autor, rok: Number(currentBook.rok) })
+      });
+      if (!putResponse.ok) await showError(putResponse);
+
+      // PATCH: zmena ceny knihy
+      const patchResponse = await fetch(`/api/knihy/${id}/cena`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cena })
+      });
+      if (!patchResponse.ok) await showError(patchResponse);
       dialog.close();
       await loadBooks();
       status.textContent = 'Zmeny boli uložené.';
@@ -85,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   dialog.querySelector('#set-delete').addEventListener('click', async () => {
     try {
-      await sendJson(`/api/knihi/${encodeURIComponent(currentBook.id)}`, 'DELETE');
+      await sendJson(`/api/knihy/${encodeURIComponent(currentBook.id)}`, 'DELETE');
       dialog.close();
       await loadBooks();
     } catch (error) {
@@ -96,14 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadBooks = async () => {
     status.textContent = 'Načítavam knihy…';
     try {
-      const response = await fetch('/api/knihi');
+      const response = await fetch('/api/knihy');
       if (!response.ok) await showError(response);
       const books = await response.json();
       bookList.replaceChildren();
 
-      books.forEach((book) => {
+      books.forEach((kniha) => {
         const row = document.createElement('tr');
-        [book.nazov, book.autor, book.rok, book.cena].forEach((value) => {
+        [kniha.nazov, kniha.autor, kniha.rok, kniha.cena].forEach((value) => {
           const cell = document.createElement('td');
           cell.textContent = value ?? '';
           row.appendChild(cell);
@@ -111,12 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const actionCell = document.createElement('td');
 
-        if (book.vymazana) {
+        if (kniha.vymazana) {
           row.style.opacity = '0.5';
           row.style.textDecoration = 'line-through';
           const restoreButton = makeButton('Vrátiť späť', async () => {
             try {
-              await sendJson(`/api/knihi/${encodeURIComponent(book.id)}/obnovit`, 'PATCH');
+              await sendJson(`/api/knihy/${encodeURIComponent(kniha.id)}/obnovit`, 'PATCH');
               await loadBooks();
             } catch (error) {
               status.textContent = `Knihu sa nepodarilo vrátiť: ${error.message}`;
@@ -125,13 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
           restoreButton.style.textDecoration = 'none';
           actionCell.appendChild(restoreButton);
         } else {
-          actionCell.appendChild(makeButton('⚙ Nastavenia', () => openSettings(book)));
+          actionCell.appendChild(makeButton('⚙ Nastavenia', () => openSettings(kniha)));
         }
 
         const purgeButton = makeButton('🗑 Vymazať', async () => {
-          if (!window.confirm(`Naozaj natrvalo vymazať knihu „${book.nazov}“? Túto akciu nie je možné vrátiť.`)) return;
+          if (!window.confirm(`Naozaj natrvalo vymazať knihu „${kniha.nazov}“? Túto akciu nie je možné vrátiť.`)) return;
           try {
-            await sendJson(`/api/knihi/${encodeURIComponent(book.id)}/natrvalo`, 'DELETE');
+            await sendJson(`/api/knihy/${encodeURIComponent(kniha.id)}/natrvalo`, 'DELETE');
             await loadBooks();
             status.textContent = 'Kniha bola natrvalo vymazaná.';
           } catch (error) {
@@ -155,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
-    const book = {
+    const kniha = {
       nazov: formData.get('nazov').trim(),
       autor: formData.get('autor').trim(),
       rok: Number(formData.get('rok')),
@@ -163,7 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      await sendJson('/api/knihi', 'POST', book);
+      const response = await fetch('/api/knihy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(kniha)
+      });
+      if (!response.ok) await showError(response);
       form.reset();
       await loadBooks();
       status.textContent = 'Kniha bola pridaná.';
