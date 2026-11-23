@@ -81,15 +81,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!putResponse.ok) await showError(putResponse);
 
-      // PATCH: zmena ceny knihy
-      const patchResponse = await fetch(`/api/knihy/${id}/cena`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cena })
-      });
-      if (!patchResponse.ok) await showError(patchResponse);
+      // PATCH: zmena ceny knihy. Server k cene pripocita "zmena",
+      // preto z novej ceny vypocitame rozdiel oproti sucasnej cene.
+      const zmena = Math.round((cena - Number(currentBook.cena)) * 100) / 100;
+      if (zmena !== 0) {
+        const patchResponse = await fetch(`/api/knihy/${id}/cena`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ zmena })
+        });
+        if (!patchResponse.ok) await showError(patchResponse);
+      }
       dialog.close();
-      await loadBooks();
+      await nacitajKnihy();
       status.textContent = 'Zmeny boli uložené.';
     } catch (error) {
       settingsStatus.textContent = `Nepodarilo sa uložiť: ${error.message}`;
@@ -100,16 +104,21 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await sendJson(`/api/knihy/${encodeURIComponent(currentBook.id)}`, 'DELETE');
       dialog.close();
-      await loadBooks();
+      await nacitajKnihy();
     } catch (error) {
       settingsStatus.textContent = `Nepodarilo sa odstrániť: ${error.message}`;
     }
   });
 
-  const loadBooks = async () => {
+  const nacitajKnihy = async () => {
     status.textContent = 'Načítavam knihy…';
     try {
-      const response = await fetch('/api/knihy');
+      const hladat = document.getElementById('hladatInput').value;
+      const zoradit = document.getElementById('zoraditSelect').value;
+      const smer = document.getElementById('smerSelect').value;
+      const params = new URLSearchParams({ hladat, zoradit, smer });
+
+      const response = await fetch('/api/knihy?' + params.toString());
       if (!response.ok) await showError(response);
       const books = await response.json();
       bookList.replaceChildren();
@@ -130,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const restoreButton = makeButton('Vrátiť späť', async () => {
             try {
               await sendJson(`/api/knihy/${encodeURIComponent(kniha.id)}/obnovit`, 'PATCH');
-              await loadBooks();
+              await nacitajKnihy();
             } catch (error) {
               status.textContent = `Knihu sa nepodarilo vrátiť: ${error.message}`;
             }
@@ -145,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!window.confirm(`Naozaj natrvalo vymazať knihu „${kniha.nazov}“? Túto akciu nie je možné vrátiť.`)) return;
           try {
             await sendJson(`/api/knihy/${encodeURIComponent(kniha.id)}/natrvalo`, 'DELETE');
-            await loadBooks();
+            await nacitajKnihy();
             status.textContent = 'Kniha bola natrvalo vymazaná.';
           } catch (error) {
             status.textContent = `Knihu sa nepodarilo vymazať: ${error.message}`;
@@ -183,12 +192,44 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!response.ok) await showError(response);
       form.reset();
-      await loadBooks();
+      await nacitajKnihy();
       status.textContent = 'Kniha bola pridaná.';
     } catch (error) {
       status.textContent = `Knihu sa nepodarilo pridať: ${error.message}`;
     }
   });
 
-  loadBooks();
+  // Reakcia na zmenu filtra alebo zoradenia
+  document.getElementById('hladatInput').addEventListener('input', nacitajKnihy);
+  document.getElementById('zoraditSelect').addEventListener('change', nacitajKnihy);
+  document.getElementById('smerSelect').addEventListener('change', nacitajKnihy);
+
+  document.getElementById('resetFilterBtn').addEventListener('click', () => {
+    document.getElementById('hladatInput').value = '';
+    document.getElementById('zoraditSelect').value = 'id';
+    document.getElementById('smerSelect').value = 'ASC';
+    nacitajKnihy();
+  });
+
+  // Bonus: meno prihláseného používateľa zo sessionStorage
+  const prihlasenyInfo = document.getElementById('prihlaseny-info');
+  if (prihlasenyInfo) {
+    let pouzivatel = null;
+    try {
+      pouzivatel = JSON.parse(sessionStorage.getItem('prihlasenyPouzivatel'));
+    } catch (error) {
+      pouzivatel = null;
+    }
+    if (pouzivatel && pouzivatel.meno) {
+      prihlasenyInfo.textContent = `Prihlásený používateľ: ${pouzivatel.meno}`;
+    } else {
+      prihlasenyInfo.append('Nie ste prihlásený. ');
+      const link = document.createElement('a');
+      link.href = 'prihlasenie.html';
+      link.textContent = 'Prihlásiť sa';
+      prihlasenyInfo.appendChild(link);
+    }
+  }
+
+  nacitajKnihy();
 });

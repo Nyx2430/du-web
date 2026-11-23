@@ -15,6 +15,7 @@
       <p class="eyebrow">Databáza · MySQL</p>
       <h1>Knižnica (SQL)</h1>
       <p>Prehľad kníh uložených v databáze a formulár na pridanie novej knihy.</p>
+      <p id="prihlaseny-info" role="status"></p>
     </header>
     <section class="content-card">
       <h2>Pridať knihu</h2>
@@ -41,6 +42,21 @@
     </section>
     <section class="content-card">
       <h2>Zoznam kníh</h2>
+      <div id="filterPanel" class="demo-form" style="max-width:none;margin:0 0 18px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));align-items:end">
+        <input id="hladatInput" type="text" placeholder="Hľadať názov alebo autora…" aria-label="Hľadať názov alebo autora">
+        <select id="zoraditSelect" aria-label="Zoradiť podľa">
+          <option value="id">Zoradiť podľa: ID</option>
+          <option value="nazov">Názov</option>
+          <option value="autor">Autor</option>
+          <option value="rok">Rok vydania</option>
+          <option value="cena">Cena</option>
+        </select>
+        <select id="smerSelect" aria-label="Smer zoradenia">
+          <option value="ASC">Vzostupne (ASC)</option>
+          <option value="DESC">Zostupne (DESC)</option>
+        </select>
+        <button id="resetFilterBtn" type="button">Zrušiť filter</button>
+      </div>
       <div class="table-scroll">
         <table class="data-table">
           <thead>

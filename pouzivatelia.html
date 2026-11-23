@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Správa používateľov | Webové technológie</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+  <script src="pouzivatelia.js" defer></script>
+</head>
+<body data-page="users">
+  <div id="topbar-container"></div>
+  <main class="page-shell">
+    <header class="page-intro">
+      <p class="eyebrow">Databáza · MySQL</p>
+      <h1>Správa používateľov</h1>
+      <p>Registrácia nového používateľa s hashovaním hesla (bcrypt) a zoznam registrovaných používateľov.</p>
+    </header>
+    <section class="content-card">
+      <h2>Registrácia</h2>
+      <form class="demo-form" id="registraciaForm">
+        <div class="field-group">
+          <label for="meno">Meno a priezvisko</label>
+          <input id="meno" type="text" placeholder="Meno a priezvisko" required>
+        </div>
+        <div class="field-group">
+          <label for="email">E-mail</label>
+          <input id="email" type="email" placeholder="E-mail" required>
+        </div>
+        <div class="field-group">
+          <label for="heslo">Heslo</label>
+          <input id="heslo" type="password" minlength="6" placeholder="Heslo (min. 6 znakov)" required>
+        </div>
+        <button type="submit">Registrovať používateľa</button>
+      </form>
+      <p class="demo-output" id="sprava" role="status" aria-live="polite"></p>
+    </section>
+    <section class="content-card">
+      <h2>Zoznam zaregistrovaných používateľov</h2>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr><th>ID</th><th>Meno</th><th>E-mail</th><th>Akcia</th></tr>
+          </thead>
+          <tbody id="zoznamPouzivatelov"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><p>Vytvorené v rámci cvičenia · Databázy a internet</p></footer>
+</body>
+</html>

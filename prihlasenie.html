@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prihlásenie | Webové technológie</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+  <script src="prihlasenie.js" defer></script>
+</head>
+<body data-page="login">
+  <div id="topbar-container"></div>
+  <main class="page-shell">
+    <header class="page-intro">
+      <p class="eyebrow">Databáza · MySQL</p>
+      <h1>Prihlásenie používateľa</h1>
+      <p>Overenie e-mailu a hesla voči zahashovanému heslu uloženému v databáze.</p>
+    </header>
+    <section class="content-card">
+      <form class="demo-form" id="prihlasenieForm">
+        <div class="field-group">
+          <label for="email">E-mail</label>
+          <input id="email" type="email" placeholder="E-mail" required>
+        </div>
+        <div class="field-group">
+          <label for="heslo">Heslo</label>
+          <input id="heslo" type="password" placeholder="Heslo" required>
+        </div>
+        <button type="submit">Prihlásiť sa</button>
+      </form>
+      <div class="demo-output" id="vysledok" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer class="site-footer"><p>Vytvorené v rámci cvičenia · Databázy a internet</p></footer>
+</body>
+</html>
