@@ -183,7 +183,7 @@ app.post("/api/prihlasenie", (req, res) => {
     return res.status(400).json({ sprava: "Zadajte e-mail aj heslo" });
   }
 
-  const sql = "SELECT * FROM pouzivatelia WHERE email = ?";
+  const sql = "SELECT id, meno, email, heslo_hash FROM pouzivatelia WHERE email = ?";
   db.query(sql, [email.trim()], async (error, vysledok) => {
     if (error) return res.status(500).json({ sprava: "Chyba SQL" });
 
